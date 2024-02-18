@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latest 20 Records</title>
+</head>
+<body>
+  <h1>Latest 20 Records</h1>
+  <ul id="latestRecords">
+    <!-- Display latest records on page load -->
+    <% for (const record of latestRecords) { %>
+      <li>
+        Temperature: <%= record.temperature %>,
+        Battery Level: <%= record.batteryLevel %>,
+        TimeStamp: <%= record.timeStamp %>
+      </li>
+    <% } %>
+  </ul>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    socket.on('newTemperature', (data) => {
+      updateLatestRecords(data);
+    });
+
+    function updateLatestRecords(data) {
+      const latestRecords = document.getElementById('latestRecords');
+      const listItem = document.createElement('li');
+      listItem.textContent = `Temperature: ${data.temperature}, Battery Level: ${data.batteryLevel}, TimeStamp: ${data.timeStamp}`;
+      latestRecords.insertBefore(listItem, latestRecords.firstChild);
+
+      // Limit the list to the latest 20 records
+      if (latestRecords.children.length > 20) {
+        latestRecords.lastChild.remove();
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
